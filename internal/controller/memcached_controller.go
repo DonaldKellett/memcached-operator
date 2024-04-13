@@ -312,10 +312,7 @@ func (r *MemcachedReconciler) deploymentForMemcached(
 	replicas := memcached.Spec.Size
 
 	// Get the Operand image
-	image, err := imageForMemcached()
-	if err != nil {
-		return nil, err
-	}
+	image := imageForMemcachedOrDefault()
 
 	dep := &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
@@ -418,10 +415,8 @@ func (r *MemcachedReconciler) deploymentForMemcached(
 // More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/
 func labelsForMemcached(name string) map[string]string {
 	var imageTag string
-	image, err := imageForMemcached()
-	if err == nil {
-		imageTag = strings.Split(image, ":")[1]
-	}
+	image := imageForMemcachedOrDefault()
+	imageTag = strings.Split(image, ":")[1]
 	return map[string]string{"app.kubernetes.io/name": "Memcached",
 		"app.kubernetes.io/instance":   name,
 		"app.kubernetes.io/version":    imageTag,
@@ -436,9 +431,18 @@ func imageForMemcached() (string, error) {
 	var imageEnvVar = "MEMCACHED_IMAGE"
 	image, found := os.LookupEnv(imageEnvVar)
 	if !found {
-		return "", fmt.Errorf("Unable to find %s environment variable with the image", imageEnvVar)
+		return "", fmt.Errorf("unable to find %s environment variable with the image", imageEnvVar)
 	}
 	return image, nil
+}
+
+// Provide a default image for Memcached if not specified
+func imageForMemcachedOrDefault() string {
+	image, err := imageForMemcached()
+	if err != nil {
+		return "memcached:1.4.36-alpine"
+	}
+	return image
 }
 
 // Filter Delete events on Pods that have been confirmed deleted

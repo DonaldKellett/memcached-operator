@@ -18,4 +18,5 @@ jobs:
         make lint
     - name: Run unit tests
       run: |
+        export GOROOT="$(go env GOROOT)"
         make test

@@ -5,4 +5,4 @@ kind: Kustomization
 images:
 - name: controller
   newName: donaldsebleung/memcached-operator
-  newTag: v0.0.1-alpha.4
+  newTag: v0.0.1-alpha.5

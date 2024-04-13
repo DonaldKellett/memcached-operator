@@ -51,7 +51,7 @@ endif
 OPERATOR_SDK_VERSION ?= v1.34.1
 
 # Image URL to use all building/pushing image targets
-IMG ?= donaldsebleung/memcached-operator:v0.0.1-alpha.4
+IMG ?= donaldsebleung/memcached-operator:v0.0.1-alpha.5
 # ENVTEST_K8S_VERSION refers to the version of kubebuilder assets to be downloaded by envtest binary.
 ENVTEST_K8S_VERSION = 1.28.3
 
